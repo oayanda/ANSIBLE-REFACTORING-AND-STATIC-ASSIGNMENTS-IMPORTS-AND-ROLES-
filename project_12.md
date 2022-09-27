@@ -51,3 +51,13 @@ Within playbooks folder, create a new file and name it `site.yml` – This file 
 Let's orangnize the workspace better, Create a new fold called `static-assignments` Move `common.yml` file into the newly `created static-assignments` folder. The folder and file tree should look like this now *( see image below )*
 
 ![create a directory](./images/9.png)
+
+Run ansible-playbook command against the `dev` environment. Create another playbook in `static-assignments` called `common-del.yml` to configure the deletion of wireshark utility which was previously installed on the servers.
+
+The folders, files and code should look as shown below.
+
+`site.yml`
+![create a directory](./images/10.png)
+
+`common-del.yml`
+![create a directory](./images/11.png)
