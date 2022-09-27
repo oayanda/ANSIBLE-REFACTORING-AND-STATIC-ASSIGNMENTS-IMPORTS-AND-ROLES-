@@ -61,3 +61,154 @@ The folders, files and code should look as shown below.
 
 `common-del.yml`
 ![create a directory](./images/11.png)
+
+>Update, commit and push code to origin refactor to initiate a pull request that trigger the webhook for a new build.
+
+Verify dynamic build in Jenkins
+![create a directory](./images/12.png)
+
+Run ansible playbook
+![create a directory](./images/13.png)
+
+Verify wireshark utility was deleted successfully. Login into any of the servers, in this case - the NFS server to verify.
+
+```bash
+wireshark --version
+```
+
+![create a directory](./images/14.png)
+
+## CONFIGURE UAT WEBSERVERS WITH A ROLE ‘WEBSERVER’
+
+Launch 2 fresh EC2 instances using RHEL 8 image, we will use them as our uat servers, so give them names accordingly – `Web1-UAT` and `Web2-UAT`.
+
+![create a directory](./images/15.png)
+
+To create a role, you must create a directory called `webserver/`, relative to the playbook file or in `/etc/ansible/` directory.
+
+Create a roles directory within, also create some child folders and files manually.
+
+>Alternatively, this can generated automatically by creating a roles directory byfront and running `ansible-galaxy init webserver` in the roles directory.
+
+![create a directory](./images/16.png)
+
+Update the inventory `ansible-config-mgt/inventory/uat.yml` file with IP addresses of your 2 UAT Web servers.
+
+![create a directory](./images/17.png)
+
+In `/etc/ansible/ansible.cfg` file uncomment `roles_path` string and provide a full path to your roles directory roles_path    = `/home/ubuntu/ansible-config-mgt/roles`, so Ansible could know where to find configured roles. save and exit.
+
+```bash
+sudo vi /etc/ansible/ansible.cfg
+```
+
+![create a directory](./images/18.png)
+
+Also add the private_key
+![create a directory](./images/18a.png)
+
+Go into tasks directory, and within the main.yml file, start writing configuration tasks to do the following:
+
+- Install and configure Apache (httpd service)
+
+- Clone Tooling website from GitHub https://github.com/oayanda/tooling.git.
+
+- Ensure the tooling website code is deployed to /var/www/html on each of 2 UAT Web servers.
+
+- Make sure httpd service is started
+
+```bash
+---
+- name: install apache
+  become: true
+  ansible.builtin.yum:
+    name: "httpd"
+    state: present
+
+- name: install git
+  become: true
+  ansible.builtin.yum:
+    name: "git"
+    state: present
+
+- name: clone a repo
+  become: true
+  ansible.builtin.git:
+    repo: https://github.com/<your-name>/tooling.git
+    dest: /var/www/html
+    force: yes
+
+- name: copy html content to one level up
+  become: true
+  command: cp -r /var/www/html/html/ /var/www/
+
+- name: Start service httpd, if not started
+  become: true
+  ansible.builtin.service:
+    name: httpd
+    state: started
+
+- name: recursively remove /var/www/html/html/ directory
+  become: true
+  ansible.builtin.file:
+    path: /var/www/html/html
+    state: absent
+
+```
+![create a directory](./images/19.png)
+
+## Reference ‘Webserver’ role
+
+Within the `static-assignments` folder, create a new assignment for uat-webservers called `uat-webservers.yml`. This is where you will reference the role.
+
+```bash
+---
+- hosts: uat-webservers
+  roles:
+     - webserver
+
+```
+
+![create a directory](./images/20.png)
+
+> Remember that the entry point to our ansible configuration is the `site.yml` file. Therefore, you need to refer your `uat-webservers.yml` role inside `site.yml`.
+
+Update `site.yml`. *Comment the previous play since it is not applicable*.
+
+```bash
+---
+- hosts: uat-webservers
+- import_playbook: ../static-assignments/uat-webservers.yml
+```
+
+![create a directory](./images/21.png)
+
+## Commit & Test
+
+Commit the changes, create a Pull Request and merge them to master branch
+![create a directory](./images/22.png)
+
+Verify build on Jenkins `Anisble job`
+
+![create a directory](./images/23.png)
+
+Verify build on Jenkins `save_artifacts`
+
+![create a directory](./images/24.png)
+
+Run Playbook
+
+```bash
+#Run the build in the build directory
+sudo ansible-playbook -i inventory/uat.yml playbooks/site.yml
+```
+
+![create a directory](./images/25.png)
+
+In other to view the web application in the browser, open port 80 for http traffic in the security group
+
+![create a directory](./images/26.png)
+
+View the web application in the browser
+
+![create a directory](./images/27.png)
