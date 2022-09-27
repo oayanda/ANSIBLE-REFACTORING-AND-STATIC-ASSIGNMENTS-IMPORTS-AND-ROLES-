@@ -11,6 +11,6 @@ sudo mkdir /home/ubuntu/ansible-config-artifact
 
 sudo chmod -R 0777 /home/ubuntu/ansible-config-artifact
 ```
-![create a directory](.\images\1.png)
+![create a directory](./images/1.png)
 Go to Jenkins web console -> Manage Jenkins -> Manage Plugins -> on Available tab search for `Copy Artifact` and install this plugin without restarting Jenkins
 
