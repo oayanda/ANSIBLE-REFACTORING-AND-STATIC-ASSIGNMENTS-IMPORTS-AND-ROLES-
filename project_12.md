@@ -46,3 +46,6 @@ Let's Refactor Ansible code by importing other playbooks into site.yml
 
 Within playbooks folder, create a new file and name it `site.yml` – This file will now be considered as an entry point into the entire infrastructure configuration. Other playbooks will be included here as a reference. In other words, `site.yml` will become a parent to all other playbooks that will b
 ![create a directory](./images/8.png)
+Let's orangnize the workspace better, Create a new fold called `static-assignments` Move `common.yml` file into the newly `created static-assignments` folder. The folder and file tree should look like this now *( see image below )*
+
+![create a directory](./images/8.png)
