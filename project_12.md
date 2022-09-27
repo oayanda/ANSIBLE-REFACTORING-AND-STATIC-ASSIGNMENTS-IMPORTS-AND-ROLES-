@@ -30,3 +30,9 @@ The main idea of `save_artifacts` project is to save artifacts into `/home/ubunt
 ![create a directory](./images/4.png)
 
 Test your set up by making some change in `README.MD` file inside your `ansible-config-mgt` repository
+
+![create a directory](./images/5.png)
+
+The Jenkins Job completed successfully. Now the Jenkins pipeline is more neat and clean.
+
+![create a directory](./images/6.png)
