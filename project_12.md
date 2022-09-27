@@ -1,4 +1,4 @@
-# Step 1 – Jenkins job enhancement
+# Step 1 – Jenkins House Cleaning
 
 Create a directory in the Jenkins server to to reduce space and streamline for every build or code change that happens on the job.
 
@@ -36,3 +36,13 @@ Test your set up by making some change in `README.MD` file inside your `ansible-
 The Jenkins Job completed successfully. Now the Jenkins pipeline is more neat and clean.
 
 ![create a directory](./images/6.png)
+
+## REFACTOR ANSIBLE CODE BY IMPORTING OTHER PLAYBOOKS INTO SITE.YML
+
+Let's Refactor Ansible code by importing other playbooks into site.yml
+
+> Create a new branch to work from called `refactor`
+![create a directory](./images/7.png)
+
+Within playbooks folder, create a new file and name it `site.yml` – This file will now be considered as an entry point into the entire infrastructure configuration. Other playbooks will be included here as a reference. In other words, `site.yml` will become a parent to all other playbooks that will b
+![create a directory](./images/8.png)
